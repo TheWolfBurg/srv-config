@@ -16,9 +16,10 @@ RETENTION_DAYS=30
 
 # Remote backup server (CONFIGURE THIS!)
 REMOTE_SERVER="YOUR_BACKUP_SERVER_IP_OR_HOSTNAME"
-REMOTE_USER="root"
-REMOTE_PATH="/backup/${HOSTNAME}"
+REMOTE_USER="backup-mailweb"
+REMOTE_PATH="/backup/mail.clocklight.de"
 REMOTE_PORT="22"
+SSH_KEY="/root/.ssh/backup_key"
 
 echo "=== Starting Data Backup at $(date) ==="
 
@@ -77,21 +78,34 @@ sha256sum * > SHA256SUMS
 # Transfer to remote backup server
 echo "Transferring backup to remote server..."
 if [ "${REMOTE_SERVER}" != "YOUR_BACKUP_SERVER_IP_OR_HOSTNAME" ]; then
-    # Create remote directory
-    ssh -p ${REMOTE_PORT} ${REMOTE_USER}@${REMOTE_SERVER} "mkdir -p ${REMOTE_PATH}"
+    # Check if SSH key exists
+    if [ ! -f "${SSH_KEY}" ]; then
+        echo "ERROR: SSH key not found at ${SSH_KEY}"
+        echo "Please run: ssh-keygen -t ed25519 -C 'backup@mail.clocklight.de' -f ${SSH_KEY}"
+        exit 1
+    fi
 
-    # Transfer with rsync
-    rsync -avz --progress -e "ssh -p ${REMOTE_PORT}" \
+    # Create remote directory (may fail if command-restriction is active, that's OK)
+    ssh -i ${SSH_KEY} -p ${REMOTE_PORT} ${REMOTE_USER}@${REMOTE_SERVER} "mkdir -p ${REMOTE_PATH}/${TIMESTAMP}" 2>/dev/null || true
+
+    # Transfer with rsync using SSH key
+    rsync -avz --progress -e "ssh -i ${SSH_KEY} -p ${REMOTE_PORT}" \
         ${BACKUP_DIR}/${TIMESTAMP}/ \
         ${REMOTE_USER}@${REMOTE_SERVER}:${REMOTE_PATH}/${TIMESTAMP}/
 
-    echo "Backup successfully transferred to ${REMOTE_SERVER}:${REMOTE_PATH}/${TIMESTAMP}/"
+    if [ $? -eq 0 ]; then
+        echo "Backup successfully transferred to ${REMOTE_SERVER}:${REMOTE_PATH}/${TIMESTAMP}/"
+    else
+        echo "ERROR: Backup transfer failed!"
+        exit 1
+    fi
 else
     echo "WARNING: Remote server not configured! Backup only stored locally."
     echo "Edit /srv/backups/scripts/backup-data.sh and configure:"
-    echo "  - REMOTE_SERVER"
-    echo "  - REMOTE_USER"
-    echo "  - REMOTE_PATH"
+    echo "  - REMOTE_SERVER (your backup server IP)"
+    echo "  - SSH_KEY path (default: /root/.ssh/backup_key)"
+    echo ""
+    echo "See BACKUP-SERVER-SETUP-SECURE.md for detailed setup instructions"
 fi
 
 # Clean up old local backups (keep last 7 days locally)
@@ -101,7 +115,7 @@ find ${BACKUP_DIR}/ -maxdepth 1 -type d -mtime +7 -exec rm -rf {} \; 2>/dev/null
 # Clean up old remote backups (keep last 30 days on remote)
 if [ "${REMOTE_SERVER}" != "YOUR_BACKUP_SERVER_IP_OR_HOSTNAME" ]; then
     echo "Cleaning up old remote backups (keeping last ${RETENTION_DAYS} days)..."
-    ssh -p ${REMOTE_PORT} ${REMOTE_USER}@${REMOTE_SERVER} \
+    ssh -i ${SSH_KEY} -p ${REMOTE_PORT} ${REMOTE_USER}@${REMOTE_SERVER} \
         "find ${REMOTE_PATH}/ -maxdepth 1 -type d -mtime +${RETENTION_DAYS} -exec rm -rf {} \;" 2>/dev/null || true
 fi
 
