@@ -1,0 +1,1 @@
+server_name mail.clocklight.de autodiscover.* autoconfig.* ;

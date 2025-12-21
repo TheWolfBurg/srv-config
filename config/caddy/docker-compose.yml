@@ -1,0 +1,26 @@
+services:
+  caddy:
+    image: caddy:latest
+    container_name: caddy-webserver
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - /srv/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /srv/caddy/sites:/etc/caddy/sites
+      - /srv/caddy/snippets:/etc/caddy/snippets
+      - /srv/caddy/data:/data
+      - /srv/caddy/config:/config
+      - /var/www:/var/www
+      - /var/log/caddy:/var/log/caddy
+    networks:
+      - caddy_network
+      - web-services
+
+networks:
+  caddy_network:
+    driver: bridge
+  web-services:
+    external: true

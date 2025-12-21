@@ -1,0 +1,20 @@
+Configuration Backup Inventory
+==============================
+Hostname: mail.clocklight.de
+Date: So 21. Dez 17:24:16 CET 2025
+Backup Script Version: 1.0
+
+Included Configurations:
+- mailcow (mailcow.conf, data/conf/, docker-compose.yml)
+- Caddy (Caddyfile, sites, snippets, docker-compose.yml)
+- Netdata (docker-compose.yml)
+- System (/etc/hostname, hosts, fstab, crontab)
+- SSH (sshd_config)
+- Firewall (iptables, ufw)
+- Docker (container list, networks, volumes)
+
+Not Included (use data backup for these):
+- Email data (/srv/mailcow/data/vmail/)
+- Databases
+- DKIM keys
+- SSL certificates (auto-renewed via Let's Encrypt)

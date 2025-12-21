@@ -1,0 +1,10 @@
+netdata.clocklight.de {
+    reverse_proxy http://46.224.122.105:19999 {
+        header_up Host {upstream_hostport}
+        header_up X-Forwarded-Host {host}
+    }
+
+    log {
+        output file /var/log/caddy/netdata.clocklight.de.log
+    }
+}

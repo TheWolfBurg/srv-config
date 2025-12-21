@@ -1,0 +1,9 @@
+wolfgang-burger.de, www.wolfgang-burger.de {
+    root * /var/www/wolfgang-burger.de
+    file_server
+    import ../snippets/compression.caddy
+
+    log {
+        output file /var/log/caddy/wolfgang-burger.de.log
+    }
+}

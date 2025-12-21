@@ -1,0 +1,8 @@
+umami.clocklight.de {
+    reverse_proxy umami-umami-1:3000
+    import ../snippets/compression.caddy
+
+    log {
+        output file /var/log/caddy/umami.clocklight.de.log
+    }
+}

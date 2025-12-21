@@ -1,0 +1,4 @@
+# Main Caddyfile
+
+# Import other site configurations if sites directory is mounted
+import sites/*.caddy

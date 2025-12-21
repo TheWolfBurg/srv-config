@@ -1,0 +1,9 @@
+NETWORK ID     NAME                                DRIVER    SCOPE
+76936f4eb5fc   bridge                              bridge    local
+e90cf653637d   caddy_caddy_network                 bridge    local
+02389014e9e2   host                                host      local
+eae58c63193d   mailcowdockerized_mailcow-network   bridge    local
+0f57667091a0   netdata_default                     bridge    local
+00c7675ff1e1   none                                null      local
+ba69d4af5346   umami_default                       bridge    local
+46ab93b99ed9   web-services                        bridge    local
