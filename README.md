@@ -385,10 +385,10 @@ docker compose logs postfix-mailcow | tail -50
 ssh-keygen -t ed25519 -C "backup@mail.clocklight.de"
 
 # Public Key zum Backup-Server kopieren
-ssh-copy-id root@BACKUP_SERVER_IP
+ssh-copy-id root@167.235.19.185
 
 # Verbindung testen
-ssh root@BACKUP_SERVER_IP "echo Connection successful"
+ssh root@167.235.19.185 "echo Connection successful"
 ```
 
 ### Backup-Script konfigurieren
@@ -396,7 +396,7 @@ ssh root@BACKUP_SERVER_IP "echo Connection successful"
 nano /srv/backups/scripts/backup-data.sh
 
 # Anpassen:
-REMOTE_SERVER="YOUR_BACKUP_SERVER_IP"
+REMOTE_SERVER="167.235.19.185"
 REMOTE_USER="root"
 REMOTE_PATH="/backup/mail.clocklight.de"
 ```

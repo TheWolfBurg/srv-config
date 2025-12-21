@@ -7,7 +7,7 @@
 #### 1. Backup-User erstellen
 ```bash
 # Als root auf Backup-Server einloggen
-ssh root@BACKUP_SERVER_IP
+ssh root@167.235.19.185
 
 # Dedizierten Backup-User anlegen
 useradd -m -s /bin/bash backup-mailweb
@@ -80,14 +80,14 @@ nano /home/backup-mailweb/.ssh/authorized_keys
 #### 5. SSH-Verbindung testen
 ```bash
 # Test ohne command-Einschränkung:
-ssh -i /root/.ssh/backup_key backup-mailweb@BACKUP_SERVER_IP "ls -la /backup/mail.clocklight.de/"
+ssh -i /root/.ssh/backup_key backup-mailweb@167.235.19.185 "ls -la /backup/mail.clocklight.de/"
 
 # Sollte das Verzeichnis anzeigen
 
 # Wenn command-Einschränkung aktiv ist, sollte obiger Befehl fehlschlagen
 # (das ist gut für Sicherheit!)
 # rsync sollte aber funktionieren:
-rsync -avz -e "ssh -i /root/.ssh/backup_key" /tmp/test.txt backup-mailweb@BACKUP_SERVER_IP:/backup/mail.clocklight.de/
+rsync -avz -e "ssh -i /root/.ssh/backup_key" /tmp/test.txt backup-mailweb@167.235.19.185:/backup/mail.clocklight.de/
 ```
 
 ---
@@ -99,7 +99,7 @@ rsync -avz -e "ssh -i /root/.ssh/backup_key" /tmp/test.txt backup-mailweb@BACKUP
 nano /srv/backups/scripts/backup-data.sh
 
 # Ändere folgende Zeilen:
-REMOTE_SERVER="DEINE_BACKUP_SERVER_IP"     # z.B. "95.217.123.45"
+REMOTE_SERVER="DEINE_167.235.19.185"     # z.B. "95.217.123.45"
 REMOTE_USER="backup-mailweb"                 # ← Geändert von root
 REMOTE_PATH="/backup/mail.clocklight.de"
 REMOTE_PORT="22"
@@ -114,7 +114,7 @@ SSH_KEY="/root/.ssh/backup_key"            # ← Neue Zeile!
 /srv/backups/scripts/backup-data.sh
 
 # Prüfen ob Backup angekommen ist
-ssh -i /root/.ssh/backup_key backup-mailweb@BACKUP_SERVER_IP "ls -lh /backup/mail.clocklight.de/"
+ssh -i /root/.ssh/backup_key backup-mailweb@167.235.19.185 "ls -lh /backup/mail.clocklight.de/"
 ```
 
 ---
@@ -216,7 +216,7 @@ ls -la /home/backup-mailweb/.ssh/
 ### Problem: SSH-Key wird nicht akzeptiert
 ```bash
 # Auf HAUPTSERVER:
-ssh -vvv -i /root/.ssh/backup_key backup-mailweb@BACKUP_SERVER_IP
+ssh -vvv -i /root/.ssh/backup_key backup-mailweb@167.235.19.185
 
 # Prüfe die Ausgabe auf Fehler
 
@@ -232,7 +232,7 @@ ls -la /root/.ssh/backup_key*
 # Detaillierte rsync-Ausgabe
 rsync -avz --progress -e "ssh -i /root/.ssh/backup_key" \
     /tmp/test.txt \
-    backup-mailweb@BACKUP_SERVER_IP:/backup/mail.clocklight.de/
+    backup-mailweb@167.235.19.185:/backup/mail.clocklight.de/
 
 # Logs prüfen
 tail -100 /var/log/backup-data.log

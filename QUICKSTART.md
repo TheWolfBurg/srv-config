@@ -20,7 +20,7 @@
 nano /srv/backups/scripts/backup-data.sh
 
 # Ändere diese Zeilen:
-REMOTE_SERVER="DEINE_BACKUP_SERVER_IP"
+REMOTE_SERVER="DEINE_167.235.19.185"
 REMOTE_USER="root"
 REMOTE_PATH="/backup/mail.clocklight.de"
 ```
@@ -37,7 +37,7 @@ ssh-keygen -t ed25519 -C "backup@mail.clocklight.de"
 cat ~/.ssh/id_ed25519.pub
 
 # Zum Backup-Server hinzufügen
-ssh-copy-id root@DEINE_BACKUP_SERVER_IP
+ssh-copy-id root@DEINE_167.235.19.185
 ```
 
 ### 3. Ersten Backup-Test durchführen
@@ -80,7 +80,7 @@ ls -lth /srv/backups/data/ | head -5
 
 ### Letzter Daten-Backup (remote)
 ```bash
-ssh root@BACKUP_SERVER_IP "ls -lth /backup/mail.clocklight.de/ | head -5"
+ssh root@167.235.19.185 "ls -lth /backup/mail.clocklight.de/ | head -5"
 ```
 
 ### Backup-Logs ansehen

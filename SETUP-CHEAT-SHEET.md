@@ -6,7 +6,7 @@
 
 ```bash
 # Als root einloggen
-ssh root@BACKUP_SERVER_IP
+ssh root@167.235.19.185
 
 # User anlegen
 useradd -m -s /bin/bash backup-mailweb
@@ -53,13 +53,13 @@ nano /home/backup-mailweb/.ssh/authorized_keys
 
 ```bash
 # Verbindung testen
-ssh -i /root/.ssh/backup_key backup-mailweb@BACKUP_SERVER_IP "ls -la /backup/"
+ssh -i /root/.ssh/backup_key backup-mailweb@167.235.19.185 "ls -la /backup/"
 # ✅ Sollte das Verzeichnis anzeigen
 
 # Script konfigurieren
 nano /srv/backups/scripts/backup-data.sh
 # Ändere nur diese Zeile:
-# REMOTE_SERVER="DEINE_BACKUP_SERVER_IP"  # z.B. "95.217.123.45"
+# REMOTE_SERVER="DEINE_167.235.19.185"  # z.B. "95.217.123.45"
 ```
 
 ---
@@ -71,7 +71,7 @@ nano /srv/backups/scripts/backup-data.sh
 /srv/backups/scripts/backup-data.sh
 
 # Prüfen ob angekommen
-ssh -i /root/.ssh/backup_key backup-mailweb@BACKUP_SERVER_IP \
+ssh -i /root/.ssh/backup_key backup-mailweb@167.235.19.185 \
     "ls -lh /backup/mail.clocklight.de/"
 ```
 

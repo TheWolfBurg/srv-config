@@ -1,5 +1,15 @@
 # Ignore data backups (too large for git)
 data/
+mailu/
+
+# Ignore all backup archives
+*.tar.gz
+*.tar.bz2
+*.zip
+*.sql
+*.sql.gz
+*.rdb
+*.rdb.gz
 
 # Ignore sensitive files
 *.key

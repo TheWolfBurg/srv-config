@@ -7,7 +7,7 @@
 **Auf dem BACKUP-SERVER (zweiter Hetzner):**
 ```bash
 # Als root einloggen
-ssh root@BACKUP_SERVER_IP
+ssh root@167.235.19.185
 
 # Backup-Verzeichnis erstellen
 mkdir -p /backup/mail.clocklight.de
@@ -38,7 +38,7 @@ chmod 600 ~/.ssh/authorized_keys
 **Auf dem HAUPTSERVER:**
 ```bash
 # Verbindung testen (sollte OHNE Passwort funktionieren)
-ssh root@BACKUP_SERVER_IP "echo SSH connection successful"
+ssh root@167.235.19.185 "echo SSH connection successful"
 ```
 
 ### 4. Backup-Script konfigurieren
@@ -48,7 +48,7 @@ ssh root@BACKUP_SERVER_IP "echo SSH connection successful"
 nano /srv/backups/scripts/backup-data.sh
 
 # Folgende Zeilen anpassen:
-REMOTE_SERVER="BACKUP_SERVER_IP_HIER"  # z.B. "95.217.123.456"
+REMOTE_SERVER="167.235.19.185_HIER"  # z.B. "95.217.123.456"
 REMOTE_USER="root"
 REMOTE_PATH="/backup/mail.clocklight.de"
 REMOTE_PORT="22"  # Standard SSH-Port
@@ -62,7 +62,7 @@ REMOTE_PORT="22"  # Standard SSH-Port
 /srv/backups/scripts/backup-data.sh
 
 # Prüfen ob Backup auf Backup-Server angekommen ist
-ssh root@BACKUP_SERVER_IP "ls -lh /backup/mail.clocklight.de/"
+ssh root@167.235.19.185 "ls -lh /backup/mail.clocklight.de/"
 ```
 
 ### 6. Optional: Backup-Server absichern
@@ -134,7 +134,7 @@ df -h /
 
 ```bash
 # Auf HAUPTSERVER:
-ssh -vvv root@BACKUP_SERVER_IP
+ssh -vvv root@167.235.19.185
 # Prüfe die Fehlerausgabe
 
 # SSH-Key Berechtigungen prüfen
@@ -148,7 +148,7 @@ ls -la ~/.ssh/
 ```bash
 # Auf HAUPTSERVER:
 # Manuell testen
-rsync -avz --progress /tmp/test.txt root@BACKUP_SERVER_IP:/tmp/
+rsync -avz --progress /tmp/test.txt root@167.235.19.185:/tmp/
 
 # Prüfe rsync-Logs
 tail -100 /var/log/backup-data.log
