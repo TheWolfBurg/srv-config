@@ -1,22 +1,22 @@
-mailcowdockerized-dovecot-mailcow-1	ghcr.io/mailcow/dovecot:2.3.21.1	Up About a minute
+mailcowdockerized-dovecot-mailcow-1	ghcr.io/mailcow/dovecot:2.3.21.1	Up 21 minutes
 caddy-webserver	caddy:latest	Up 5 hours
 netdata	netdata/netdata:latest	Up 5 hours (healthy)
-mailcowdockerized-watchdog-mailcow-1	ghcr.io/mailcow/watchdog:2.09	Up About a minute
-mailcowdockerized-acme-mailcow-1	ghcr.io/mailcow/acme:1.94	Up About a minute
-mailcowdockerized-nginx-mailcow-1	ghcr.io/mailcow/nginx:1.05	Up About a minute
-mailcowdockerized-ofelia-mailcow-1	mcuadros/ofelia:latest	Up About a minute
-mailcowdockerized-rspamd-mailcow-1	ghcr.io/mailcow/rspamd:2.4	Up About a minute
-mailcowdockerized-postfix-mailcow-1	ghcr.io/mailcow/postfix:3.7.11	Up About a minute
-mailcowdockerized-php-fpm-mailcow-1	ghcr.io/mailcow/phpfpm:8.2.29	Up About a minute
-mailcowdockerized-mysql-mailcow-1	mariadb:10.11	Up About a minute
-mailcowdockerized-postfix-tlspol-mailcow-1	ghcr.io/mailcow/postfix-tlspol:1.8.22	Up About a minute
-mailcowdockerized-clamd-mailcow-1	ghcr.io/mailcow/clamd:1.71	Up About a minute (healthy)
-mailcowdockerized-redis-mailcow-1	redis:7.4.6-alpine	Up About a minute
-mailcowdockerized-memcached-mailcow-1	memcached:alpine	Up About a minute
-mailcowdockerized-sogo-mailcow-1	ghcr.io/mailcow/sogo:5.12.4	Up About a minute
-mailcowdockerized-unbound-mailcow-1	ghcr.io/mailcow/unbound:1.24	Up About a minute (healthy)
-mailcowdockerized-dockerapi-mailcow-1	ghcr.io/mailcow/dockerapi:2.11	Up About a minute
-mailcowdockerized-olefy-mailcow-1	ghcr.io/mailcow/olefy:1.15	Up About a minute
-mailcowdockerized-netfilter-mailcow-1	ghcr.io/mailcow/netfilter:1.63	Up About a minute
+mailcowdockerized-watchdog-mailcow-1	ghcr.io/mailcow/watchdog:2.09	Up 21 minutes
+mailcowdockerized-acme-mailcow-1	ghcr.io/mailcow/acme:1.94	Up 21 minutes
+mailcowdockerized-nginx-mailcow-1	ghcr.io/mailcow/nginx:1.05	Up 21 minutes
+mailcowdockerized-ofelia-mailcow-1	mcuadros/ofelia:latest	Up 21 minutes
+mailcowdockerized-rspamd-mailcow-1	ghcr.io/mailcow/rspamd:2.4	Up 21 minutes
+mailcowdockerized-postfix-mailcow-1	ghcr.io/mailcow/postfix:3.7.11	Up 21 minutes
+mailcowdockerized-php-fpm-mailcow-1	ghcr.io/mailcow/phpfpm:8.2.29	Up 21 minutes
+mailcowdockerized-mysql-mailcow-1	mariadb:10.11	Up 21 minutes
+mailcowdockerized-postfix-tlspol-mailcow-1	ghcr.io/mailcow/postfix-tlspol:1.8.22	Up 21 minutes
+mailcowdockerized-clamd-mailcow-1	ghcr.io/mailcow/clamd:1.71	Up 21 minutes (healthy)
+mailcowdockerized-redis-mailcow-1	redis:7.4.6-alpine	Up 21 minutes
+mailcowdockerized-memcached-mailcow-1	memcached:alpine	Up 21 minutes
+mailcowdockerized-sogo-mailcow-1	ghcr.io/mailcow/sogo:5.12.4	Up 21 minutes
+mailcowdockerized-unbound-mailcow-1	ghcr.io/mailcow/unbound:1.24	Up 21 minutes (healthy)
+mailcowdockerized-dockerapi-mailcow-1	ghcr.io/mailcow/dockerapi:2.11	Up 21 minutes
+mailcowdockerized-olefy-mailcow-1	ghcr.io/mailcow/olefy:1.15	Up 21 minutes
+mailcowdockerized-netfilter-mailcow-1	ghcr.io/mailcow/netfilter:1.63	Up 21 minutes
 umami-umami-1	ghcr.io/umami-software/umami:postgresql-latest	Up 4 days
 umami-db-1	postgres:16-alpine	Up 4 days

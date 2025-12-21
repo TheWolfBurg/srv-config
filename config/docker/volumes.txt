@@ -22,7 +22,6 @@ local     mailcowdockerized_rspamd-vol-1
 local     mailcowdockerized_sogo-userdata-backup-vol-1
 local     mailcowdockerized_sogo-web-vol-1
 local     mailcowdockerized_vmail-index-vol-1
-local     mailcowdockerized_vmail-vol-1
 local     mailu_postgres_data
 local     mailu_redis_data
 local     netdata_netdatacache

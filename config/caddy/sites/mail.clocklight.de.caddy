@@ -1,5 +1,5 @@
 mail.clocklight.de {
-    reverse_proxy https://127.0.0.1:8443 {
+    reverse_proxy https://46.224.122.105:8443 {
         import ../snippets/reverse_proxy_headers.caddy
         transport http {
             tls_insecure_skip_verify
