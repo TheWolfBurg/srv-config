@@ -489,6 +489,41 @@ grep SKIP_LETS_ENCRYPT mailcow.conf
 
 ---
 
+## 🔧 System-Wartung
+
+### Zombie-Prozess Cleanup
+
+Das System verfügt über ein automatisches Cleanup-System für Zombie-Prozesse.
+
+**Script:** `/usr/local/bin/cleanup-zombies.sh`
+
+**Funktionsweise:**
+- Läuft automatisch alle 15 Minuten via Cron-Job
+- Identifiziert Zombie-Prozesse im System
+- Beendet die Elternprozesse der Zombies (außer kritische System-Prozesse)
+- Schützt wichtige Prozesse wie systemd, init, dockerd und containerd
+
+**Log-Datei:** `/var/log/zombie-cleanup.log`
+
+**Cron-Job:**
+```
+*/15 * * * * /usr/local/bin/cleanup-zombies.sh
+```
+
+**Nützliche Befehle:**
+```bash
+# Manuelle Ausführung
+/usr/local/bin/cleanup-zombies.sh
+
+# Log überprüfen
+cat /var/log/zombie-cleanup.log
+
+# Aktuelle Zombie-Prozesse anzeigen
+ps aux | awk '$8 ~ /Z/ { print }'
+```
+
+---
+
 ## 📞 Support & Kontakt
 
 - mailcow Dokumentation: https://docs.mailcow.email
@@ -499,4 +534,4 @@ grep SKIP_LETS_ENCRYPT mailcow.conf
 
 **Erstellt am:** 2025-12-21
 **Version:** 1.0
-**Letzte Aktualisierung:** 2025-12-21
+**Letzte Aktualisierung:** 2025-12-23
