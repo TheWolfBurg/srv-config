@@ -75,17 +75,39 @@ EXTERNAL_SMTP_PASSWORD="dein-gmail-app-passwort"
 - ✅ Funktioniert auch wenn lokaler Mailserver down ist (via Gmail)
 - ✅ Mehrere Benachrichtigungswege für Redundanz
 
-### 3. Cronjob
+### 3. Daily Status Report: `/usr/local/bin/mailcow-daily-report.sh`
 
-Automatische Ausführung alle 10 Minuten:
+Sendet täglich um 2:00 Uhr einen umfassenden Status-Report per Email.
+
+**Inhalt des Reports:**
+- 📊 System-Übersicht (Uptime, CPU, RAM, Disk)
+- 📬 Mail-Dienste Status (Container, Queue)
+- 📈 Monitoring-Statistik (Fehler der letzten 24h)
+- 🔍 Detaillierter Service-Status
+- 🚨 Letzte Fehler (falls vorhanden)
+
+**Features:**
+- ✅ Täglicher Report um 2:00 Uhr
+- ✅ Sendet an: `wolf.burger@gmail.com`
+- ✅ Automatisches Status-Icon (✅/⚠️/🚨) je nach Zustand
+- ✅ Übersichtliche Statistiken der letzten 24 Stunden
+- ✅ Handlungsempfehlungen bei Problemen
+
+### 4. Cronjobs
+
+Automatische Ausführungen:
 
 ```bash
+# Monitoring alle 10 Minuten
 */10 * * * * /usr/local/bin/mailcow-monitor.sh >/dev/null 2>&1
+
+# Daily Report um 2:00 Uhr nachts
+0 2 * * * /usr/local/bin/mailcow-daily-report.sh >/dev/null 2>&1
 ```
 
 Prüfen mit:
 ```bash
-crontab -l | grep mailcow-monitor
+crontab -l | grep mailcow
 ```
 
 ## Log-Dateien
@@ -129,6 +151,17 @@ tail -50 /var/log/mailcow-critical-alerts.log
 grep "erfolgreich versendet\|via externem SMTP" /var/log/mailcow-critical-alerts.log
 ```
 
+### Daily Report Logfile: `/var/log/mailcow-daily-report.log`
+Protokolliert die täglichen Status-Reports
+
+```bash
+# Report-Log anzeigen
+tail -20 /var/log/mailcow-daily-report.log
+
+# Prüfen wann letzter Report gesendet wurde
+tail -1 /var/log/mailcow-daily-report.log
+```
+
 ## Manueller Check
 
 Du kannst jederzeit einen manuellen Check durchführen:
@@ -139,6 +172,9 @@ Du kannst jederzeit einen manuellen Check durchführen:
 
 # Test-Alert senden (nur wenn Fehler im Error-Log vorhanden)
 /usr/local/bin/mailcow-alert-v2.sh
+
+# Daily Report manuell senden
+/usr/local/bin/mailcow-daily-report.sh
 ```
 
 ## Wartung
@@ -366,6 +402,12 @@ ls -lh /var/run/mailcow-last-alert 2>/dev/null && \
 
 ## Changelog
 
+### Version 2.2 - 25. Dezember 2025
+- ✅ **NEU:** Täglicher Status-Report um 2:00 Uhr nachts
+- ✅ **NEU:** Umfassende 24h-Statistiken (Fehler, Alerts, Services)
+- ✅ **NEU:** Automatisches Status-Icon basierend auf Fehlerzahl
+- ✅ **NEU:** Handlungsempfehlungen im Daily Report
+
 ### Version 2.1 - 25. Dezember 2025
 - ✅ **NEU:** CPU-Auslastung Monitoring (Warnung ab 80%, Fehler ab 90%)
 - ✅ **NEU:** RAM-Auslastung Monitoring (Warnung ab 80%, Fehler ab 90%)
@@ -418,10 +460,12 @@ Bei Problemen oder Fragen:
 
 | Datei | Beschreibung | Berechtigungen |
 |-------|--------------|----------------|
-| `/usr/local/bin/mailcow-monitor.sh` | Haupt-Monitoring-Skript | -rwx--x--x |
-| `/usr/local/bin/mailcow-alert-v2.sh` | Alert-Benachrichtigungssystem | -rwx--x--x |
+| `/usr/local/bin/mailcow-monitor.sh` | Haupt-Monitoring-Skript | -rwxr-xr-x |
+| `/usr/local/bin/mailcow-alert-v2.sh` | Alert-Benachrichtigungssystem | -rwxr-xr-x |
+| `/usr/local/bin/mailcow-daily-report.sh` | Täglicher Status-Report | -rwxr-xr-x |
 | `/root/.mailcow-alert-credentials` | Gmail SMTP Credentials | -rw------- |
 | `/var/log/mailcow-monitor.log` | Monitoring-Log | -rw-r--r-- |
 | `/var/log/mailcow-monitor-errors.log` | Nur Fehler | -rw-r--r-- |
 | `/var/log/mailcow-critical-alerts.log` | Alert-Protokoll | -rw-r--r-- |
+| `/var/log/mailcow-daily-report.log` | Daily Report Log | -rw-r--r-- |
 | `/var/run/mailcow-last-alert` | Timestamp letzter Alert | -rw-r--r-- |
