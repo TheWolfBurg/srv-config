@@ -31,7 +31,7 @@ Führt alle 10 Minuten automatisch folgende Checks durch:
 - ✅ **Festplattenspeicher** - Verwendung der vmail-Partition
 - ✅ **CPU-Auslastung** - Prozessorauslastung (Warnung ab 80%, Fehler ab 90%)
 - ✅ **RAM-Auslastung** - Speicherverbrauch (Warnung ab 80%, Fehler ab 90%)
-- ✅ **System Load Average** - Systemlast pro Core (Info ab 100%, Fehler ab 150%)
+- ✅ **System Load Average** - Systemlast pro Core (Info ab 100%, Fehler ab 170%)
 
 ### 2. Alert-Skript V2: `/usr/local/bin/mailcow-alert-v2.sh`
 
@@ -324,7 +324,7 @@ if [ $TIME_DIFF -lt 7200 ]; then
 | Festplatte (vmail) | < 80% | 80-90% | > 90% | Alert |
 | CPU-Auslastung | < 80% | 80-90% | > 90% | Alert |
 | RAM-Auslastung | < 80% | 80-90% | > 90% | Alert |
-| System Load/Core | < 100% | 100-150% | > 150% | Alert |
+| System Load/Core | < 100% | 100-170% | > 170% | Alert |
 | Dovecot-Fehler | 0 | - | > 0 in 5 Min | Alert |
 | Container | Running | - | Not running | Alert |
 | Ports | Open | - | Closed | Alert |

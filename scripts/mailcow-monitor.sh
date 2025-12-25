@@ -214,7 +214,7 @@ check_load_average() {
         LOAD_PERCENT=0
     fi
 
-    if [ "$LOAD_PERCENT" -gt 150 ]; then
+    if [ "$LOAD_PERCENT" -gt 170 ]; then
         log_error "System Load ist hoch: $LOAD_RAW bei $CPU_CORES Cores ($LOAD_PERCENT%)"
     elif [ "$LOAD_PERCENT" -gt 100 ]; then
         log_info "System Load: $LOAD_RAW bei $CPU_CORES Cores ($LOAD_PERCENT%)"
