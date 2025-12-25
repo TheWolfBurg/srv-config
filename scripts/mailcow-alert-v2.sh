@@ -27,9 +27,9 @@ USE_WEBHOOK=false
 WEBHOOK_URL=""  # z.B. https://hooks.slack.com/services/YOUR/WEBHOOK/URL
 
 # Option 4: Telegram Bot
-USE_TELEGRAM=false
-TELEGRAM_BOT_TOKEN=""
-TELEGRAM_CHAT_ID=""
+USE_TELEGRAM=true
+TELEGRAM_BOT_TOKEN="8342326725:AAFMG7kDfDx445VyAV75F2r3CS1N3re-P7M"
+TELEGRAM_CHAT_ID="1272486023"
 
 # Option 5: Log-Datei (immer aktiv als Fallback)
 USE_LOGFILE=true

@@ -39,19 +39,23 @@ Führt alle 10 Minuten automatisch folgende Checks durch:
 
 #### Konfigurierte Benachrichtigungskanäle:
 
-**🔴 Primär: Externe SMTP (Gmail)**
+**🔴 Primär: Telegram Bot**
+- ✅ **AKTIV** - Instant-Benachrichtigungen auf dein Handy
+- Bot: `clocklight.uptimekuma_bot`
+- Chat-ID: `1272486023`
+
+**🟠 Sekundär: Externe SMTP (Gmail)**
 - ✅ **AKTIV** - Sendet Alerts an: `wolf.burger@gmail.com`
 - SMTP-Server: `smtp.gmail.com:587`
 - Absender: `claudia.steinhage@gmail.com`
 - Authentifizierung: App-Passwort in `/root/.mailcow-alert-credentials`
 
-**⚪ Sekundär: Lokale Email**
-- Versucht zuerst lokalen Mailserver zu nutzen
-- Fallback zu Gmail falls lokal fehlschlägt
+**⚪ Tertiär: Lokale Email**
+- Versucht lokalen Mailserver zu nutzen
+- Fallback zu externen Kanälen falls lokal fehlschlägt
 
 **⚫ Optional: Weitere Kanäle (aktuell deaktiviert)**
 - Webhook (Slack, Discord, etc.)
-- Telegram Bot
 - Log-Datei (immer aktiv als Backup)
 
 #### Gmail SMTP Konfiguration
@@ -69,11 +73,13 @@ EXTERNAL_SMTP_PASSWORD="dein-gmail-app-passwort"
 **Wichtig:** Diese Datei ist mit `chmod 600` geschützt (nur root kann lesen).
 
 #### Features:
+- ✅ **Telegram:** Instant-Push-Benachrichtigungen auf dein Handy
+- ✅ **Email:** Zusätzlich via Gmail an wolf.burger@gmail.com
 - ✅ Sendet maximal 1 Alert pro Stunde (verhindert Spam)
 - ✅ Enthält Details zu den letzten 20 Fehlern
 - ✅ Gibt konkrete Handlungsempfehlungen
-- ✅ Funktioniert auch wenn lokaler Mailserver down ist (via Gmail)
-- ✅ Mehrere Benachrichtigungswege für Redundanz
+- ✅ Funktioniert auch wenn lokaler Mailserver down ist
+- ✅ Mehrere Benachrichtigungswege für maximale Redundanz
 
 ### 3. Daily Status Report: `/usr/local/bin/mailcow-daily-report.sh`
 
@@ -401,6 +407,11 @@ ls -lh /var/run/mailcow-last-alert 2>/dev/null && \
 ```
 
 ## Changelog
+
+### Version 2.3 - 25. Dezember 2025
+- ✅ **NEU:** Telegram-Benachrichtigungen aktiviert
+- ✅ **NEU:** Instant-Push-Nachrichten bei Problemen
+- ✅ Alerts jetzt über 3 Kanäle: Telegram + Gmail + Log
 
 ### Version 2.2 - 25. Dezember 2025
 - ✅ **NEU:** Täglicher Status-Report um 2:00 Uhr nachts
