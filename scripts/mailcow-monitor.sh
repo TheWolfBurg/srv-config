@@ -156,6 +156,73 @@ check_disk_space() {
     fi
 }
 
+# 9. Prüfe CPU-Auslastung
+check_cpu_usage() {
+    # CPU-Auslastung über 1 Minute gemittelt (idle time invertiert)
+    CPU_IDLE=$(top -bn2 -d 0.5 | grep "Cpu(s)" | tail -1 | awk '{print $8}' | cut -d'%' -f1 | cut -d'.' -f1)
+
+    # Fallback falls leer
+    if [ -z "$CPU_IDLE" ]; then
+        CPU_IDLE=0
+    fi
+
+    CPU_USAGE=$((100 - CPU_IDLE))
+
+    if [ "$CPU_USAGE" -gt 90 ]; then
+        log_error "CPU-Auslastung ist bei $CPU_USAGE% (Threshold: 90%)"
+    elif [ "$CPU_USAGE" -gt 80 ]; then
+        log_info "CPU-Auslastung ist bei $CPU_USAGE% (Warnung ab 80%)"
+    else
+        log_success "CPU-Auslastung OK ($CPU_USAGE%)"
+    fi
+}
+
+# 10. Prüfe RAM-Auslastung
+check_memory_usage() {
+    # Speicher-Auslastung in Prozent
+    MEM_TOTAL=$(free | awk '/^Mem:/ {print $2}')
+    MEM_AVAILABLE=$(free | awk '/^Mem:/ {print $7}')
+    MEM_USED=$((MEM_TOTAL - MEM_AVAILABLE))
+    MEM_USAGE=$((MEM_USED * 100 / MEM_TOTAL))
+
+    if [ "$MEM_USAGE" -gt 90 ]; then
+        log_error "RAM-Auslastung ist bei $MEM_USAGE% (Threshold: 90%)"
+    elif [ "$MEM_USAGE" -gt 80 ]; then
+        log_info "RAM-Auslastung ist bei $MEM_USAGE% (Warnung ab 80%)"
+    else
+        log_success "RAM-Auslastung OK ($MEM_USAGE%)"
+    fi
+}
+
+# 11. Prüfe System Load Average
+check_load_average() {
+    # Hole Load Average (1 Minute) und bereinige es
+    LOAD_RAW=$(uptime | awk -F'load average:' '{print $2}' | awk '{print $1}')
+    # Entferne Kommas und konvertiere zu Ganzzahl (multipliziere mit 100 für Präzision)
+    LOAD_1MIN=$(echo "$LOAD_RAW" | tr ',' '.' | cut -d'.' -f1)
+    CPU_CORES=$(nproc)
+
+    # Fallback falls leer
+    if [ -z "$LOAD_1MIN" ] || [ "$LOAD_1MIN" = "" ]; then
+        LOAD_1MIN=0
+    fi
+
+    # Berechne Load pro Core (als Ganzzahl-Prozentsatz)
+    if [ "$CPU_CORES" -gt 0 ] && [ "$LOAD_1MIN" -ge 0 ]; then
+        LOAD_PERCENT=$((LOAD_1MIN * 100 / CPU_CORES))
+    else
+        LOAD_PERCENT=0
+    fi
+
+    if [ "$LOAD_PERCENT" -gt 150 ]; then
+        log_error "System Load ist hoch: $LOAD_RAW bei $CPU_CORES Cores ($LOAD_PERCENT%)"
+    elif [ "$LOAD_PERCENT" -gt 100 ]; then
+        log_info "System Load: $LOAD_RAW bei $CPU_CORES Cores ($LOAD_PERCENT%)"
+    else
+        log_success "System Load OK: $LOAD_RAW bei $CPU_CORES Cores"
+    fi
+}
+
 # Hauptprogramm
 main() {
     echo "=== Mailcow Monitoring gestartet um $TIMESTAMP ===" >> "$LOG_FILE"
@@ -168,6 +235,9 @@ main() {
     check_dovecot_errors
     check_mail_queue
     check_disk_space
+    check_cpu_usage
+    check_memory_usage
+    check_load_average
 
     # Zusammenfassung
     if [ $ERROR_COUNT -eq 0 ]; then

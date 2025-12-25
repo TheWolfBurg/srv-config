@@ -29,6 +29,9 @@ Führt alle 10 Minuten automatisch folgende Checks durch:
 - ✅ **Dovecot-Logs** - Kritische Fehler in den letzten 5 Minuten
 - ✅ **Mail-Queue** - Anzahl wartender Emails
 - ✅ **Festplattenspeicher** - Verwendung der vmail-Partition
+- ✅ **CPU-Auslastung** - Prozessorauslastung (Warnung ab 80%, Fehler ab 90%)
+- ✅ **RAM-Auslastung** - Speicherverbrauch (Warnung ab 80%, Fehler ab 90%)
+- ✅ **System Load Average** - Systemlast pro Core (Info ab 100%, Fehler ab 150%)
 
 ### 2. Alert-Skript V2: `/usr/local/bin/mailcow-alert-v2.sh`
 
@@ -276,7 +279,10 @@ if [ $TIME_DIFF -lt 7200 ]; then
 | Komponente | Info | Warnung | Kritisch | Aktion |
 |------------|------|---------|----------|--------|
 | Mail-Queue | < 10 | 10-50 Emails | > 50 Emails | Alert |
-| Festplatte | < 80% | 80-90% | > 90% | Alert |
+| Festplatte (vmail) | < 80% | 80-90% | > 90% | Alert |
+| CPU-Auslastung | < 80% | 80-90% | > 90% | Alert |
+| RAM-Auslastung | < 80% | 80-90% | > 90% | Alert |
+| System Load/Core | < 100% | 100-150% | > 150% | Alert |
 | Dovecot-Fehler | 0 | - | > 0 in 5 Min | Alert |
 | Container | Running | - | Not running | Alert |
 | Ports | Open | - | Closed | Alert |
@@ -359,6 +365,12 @@ ls -lh /var/run/mailcow-last-alert 2>/dev/null && \
 ```
 
 ## Changelog
+
+### Version 2.1 - 25. Dezember 2025
+- ✅ **NEU:** CPU-Auslastung Monitoring (Warnung ab 80%, Fehler ab 90%)
+- ✅ **NEU:** RAM-Auslastung Monitoring (Warnung ab 80%, Fehler ab 90%)
+- ✅ **NEU:** System Load Average Monitoring (Info ab 100%, Fehler ab 150%)
+- ✅ Log-Rotation konfiguriert (wöchentlich, automatische Komprimierung)
 
 ### Version 2.0 - 25. Dezember 2025
 - ✅ Umstellung auf `mailcow-alert-v2.sh`
