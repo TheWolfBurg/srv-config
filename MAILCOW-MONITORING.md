@@ -410,6 +410,12 @@ ls -lh /var/run/mailcow-last-alert 2>/dev/null && \
 
 ## Changelog
 
+### Version 2.5 - 25. Dezember 2025
+- ✅ **NEU:** SSH-Ban via fail2ban aktiviert
+- ✅ **NEU:** Automatisches Bannen nach 5 Fehlversuchen
+- ✅ **NEU:** Eskalierendes Ban-System (24h → 48h → 96h → 7 Tage)
+- ✅ Fail2ban-Konfiguration im Repository gesichert
+
 ### Version 2.4 - 25. Dezember 2025
 - ✅ **NEU:** Security-Statistiken im Daily Report
 - ✅ **NEU:** SSH-Angriffsstatistiken (Failed Password, Invalid User)
