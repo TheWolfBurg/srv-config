@@ -89,6 +89,7 @@ Sendet täglich um 2:00 Uhr einen umfassenden Status-Report per Email.
 - 📊 System-Übersicht (Uptime, CPU, RAM, Disk)
 - 📬 Mail-Dienste Status (Container, Queue)
 - 📈 Monitoring-Statistik (Fehler der letzten 24h)
+- 🛡️ **Security-Statistik (SSH-Angriffe, Fail2ban Bans)**
 - 🔍 Detaillierter Service-Status
 - 🚨 Letzte Fehler (falls vorhanden)
 
@@ -97,6 +98,7 @@ Sendet täglich um 2:00 Uhr einen umfassenden Status-Report per Email.
 - ✅ Sendet an: `wolf.burger@gmail.com`
 - ✅ Automatisches Status-Icon (✅/⚠️/🚨) je nach Zustand
 - ✅ Übersichtliche Statistiken der letzten 24 Stunden
+- ✅ **Security-Übersicht: SSH-Angriffe & Fail2ban Bans**
 - ✅ Handlungsempfehlungen bei Problemen
 
 ### 4. Cronjobs
@@ -407,6 +409,12 @@ ls -lh /var/run/mailcow-last-alert 2>/dev/null && \
 ```
 
 ## Changelog
+
+### Version 2.4 - 25. Dezember 2025
+- ✅ **NEU:** Security-Statistiken im Daily Report
+- ✅ **NEU:** SSH-Angriffsstatistiken (Failed Password, Invalid User)
+- ✅ **NEU:** Fail2ban Ban-Statistiken (24h & aktuell geblockt)
+- ✅ System Load Threshold angepasst: 150% → 170%
 
 ### Version 2.3 - 25. Dezember 2025
 - ✅ **NEU:** Telegram-Benachrichtigungen aktiviert

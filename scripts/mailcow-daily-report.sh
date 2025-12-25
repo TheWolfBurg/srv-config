@@ -49,7 +49,16 @@ fi
 # 7. Alerts gesendet in letzten 24h
 ALERTS_SENT=$(grep -c "Alert erfolgreich versendet" /var/log/mailcow-critical-alerts.log 2>/dev/null || echo "0")
 
-# 8. Status-Icon basierend auf Fehlern
+# 8. Security-Statistiken (Angriffe)
+FAILED_SSH_24H=$(journalctl -u ssh --since "24 hours ago" 2>/dev/null | grep -c "Failed password" || echo "0")
+FAILED_SSH_INVALID=$(journalctl -u ssh --since "24 hours ago" 2>/dev/null | grep -c "Invalid user" || echo "0")
+TOTAL_SSH_ATTACKS=$((FAILED_SSH_24H + FAILED_SSH_INVALID))
+
+# Fail2ban Statistiken
+FAIL2BAN_BANNED_NOW=$(fail2ban-client status 2>/dev/null | grep "Currently banned" | awk '{sum+=$NF} END {print sum}' || echo "0")
+FAIL2BAN_BANS_24H=$(grep "Ban " /var/log/fail2ban.log 2>/dev/null | wc -l || echo "0")
+
+# 9. Status-Icon basierend auf Fehlern
 if [ $TOTAL_ERRORS -eq 0 ]; then
     STATUS_ICON="✅"
     STATUS_TEXT="ALLES OK"
@@ -97,6 +106,15 @@ Zeit: $(date '+%H:%M:%S Uhr')
 ❌ Fehler heute:        $ERRORS_24H
 ❌ Fehler gestern:      $ERRORS_YESTERDAY
 🔔 Alerts versendet:    $ALERTS_SENT
+
+🛡️ SECURITY (24 Stunden)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔐 SSH-Angriffe:        $TOTAL_SSH_ATTACKS
+   └─ Failed Password:  $FAILED_SSH_24H
+   └─ Invalid User:     $FAILED_SSH_INVALID
+🚫 Fail2ban Bans:       $FAIL2BAN_BANS_24H (heute)
+🔒 Aktuell geblockt:    $FAIL2BAN_BANNED_NOW IPs
 "
 
 # Füge letzte Fehler hinzu falls vorhanden
