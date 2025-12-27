@@ -197,18 +197,31 @@ dig example.com MX
 echo "Test" | mail -s "Test" info@example.com
 ```
 
-### 4. DKIM-Record holen
-1. Gehe zu: https://mail.clocklight.de:8443
-2. Login als Admin
-3. **Konfiguration** → **Routings** → **DKIM-Schlüssel**
-4. Wähle Domain: example.com
-5. Kopiere DKIM-Record
-6. Füge ihn bei deinem DNS-Provider hinzu:
-   ```
-   Type: TXT
-   Name: dkim._domainkey
-   Value: [langer DKIM-String von Mailcow]
-   ```
+### 4. DKIM-Record verwenden
+
+**✨ NEU: DKIM wird automatisch geholt!**
+
+Das Skript holt den DKIM-Record automatisch von Mailcow und zeigt ihn direkt an:
+
+```
+# DKIM Record (TXT) ⭐ WICHTIG!
+Type: TXT
+Name: dkim._domainkey
+Value: "v=DKIM1; k=rsa; p=MIGfMA0GCSq..."
+TTL: 3600
+
+✓ DKIM record is ready to use!
+```
+
+**Kopiere einfach den Wert und trage ihn bei deinem DNS-Provider ein!**
+
+Falls DKIM noch nicht verfügbar ist (sehr selten), zeigt das Skript:
+```
+⚠ DKIM record not yet available
+Please wait a few minutes, then get it from:
+https://mail.clocklight.de:8443
+→ Konfiguration → Routings → DKIM-Schlüssel → example.com
+```
 
 ---
 
