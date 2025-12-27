@@ -20,7 +20,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 MAILCOW_HOSTNAME="mail.clocklight.de"
-MAILCOW_API_URL="https://${MAILCOW_HOSTNAME}/api/v1"
+MAILCOW_API_URL="https://127.0.0.1:8443/api/v1"
 MAILCOW_API_KEY_FILE="/root/.mailcow-api-key"
 ADMIN_EMAIL="admin@wolfgang-burger.de"
 CADDY_SITES_DIR="/srv/caddy/sites"
@@ -103,13 +103,13 @@ mailcow_api_call() {
     local data=$3
 
     if [[ -n "$data" ]]; then
-        curl -s -X "$method" \
+        curl -s -k -X "$method" \
             -H "X-API-Key: $MAILCOW_API_KEY" \
             -H "Content-Type: application/json" \
             -d "$data" \
             "${MAILCOW_API_URL}/${endpoint}"
     else
-        curl -s -X "$method" \
+        curl -s -k -X "$method" \
             -H "X-API-Key: $MAILCOW_API_KEY" \
             "${MAILCOW_API_URL}/${endpoint}"
     fi
