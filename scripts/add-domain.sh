@@ -328,8 +328,34 @@ reload_caddy() {
     fi
 }
 
+get_dkim_record() {
+    local domain=$1
+
+    print_info "Fetching DKIM record from Mailcow..."
+
+    # Wait a bit for Mailcow to generate DKIM
+    sleep 3
+
+    # Get DKIM from API
+    local dkim_response=$(mailcow_api_call "GET" "get/dkim/${domain}")
+
+    # Parse DKIM public key
+    local dkim_pubkey=$(echo "$dkim_response" | grep -o '"pubkey":"[^"]*"' | cut -d'"' -f4)
+
+    if [[ -n "$dkim_pubkey" ]]; then
+        print_success "DKIM record retrieved"
+        echo "$dkim_pubkey"
+    else
+        print_warning "DKIM record not yet available (will be generated soon)"
+        echo ""
+    fi
+}
+
 generate_dns_records() {
     local domain=$1
+
+    # Get DKIM record
+    local dkim_record=$(get_dkim_record "$domain")
 
     echo ""
     echo -e "${BLUE}================================${NC}"
@@ -369,13 +395,29 @@ generate_dns_records() {
     echo "Value: \"v=DMARC1; p=quarantine; rua=mailto:postmaster@$domain\""
     echo "TTL: 3600"
     echo ""
-    echo -e "${YELLOW}Note: DKIM record will be available in Mailcow admin panel after domain is added${NC}"
+
+    if [[ -n "$dkim_record" ]]; then
+        echo -e "${GREEN}# DKIM Record (TXT) ⭐ WICHTIG!${NC}"
+        echo "Type: TXT"
+        echo "Name: dkim._domainkey"
+        echo "Value: \"$dkim_record\""
+        echo "TTL: 3600"
+        echo ""
+        echo -e "${GREEN}✓ DKIM record is ready to use!${NC}"
+    else
+        echo -e "${YELLOW}# DKIM Record (TXT)${NC}"
+        echo -e "${YELLOW}⚠ DKIM record not yet available${NC}"
+        echo "Please wait a few minutes, then get it from:"
+        echo "https://${MAILCOW_HOSTNAME}:8443"
+        echo "→ Konfiguration → Routings → DKIM-Schlüssel → $domain"
+    fi
     echo ""
 }
 
 create_summary_file() {
     local domain=$1
     local summary_file="/srv/domains/${domain}-setup-summary.txt"
+    local dkim_record=$2
 
     mkdir -p /srv/domains
 
@@ -404,15 +446,43 @@ Web Configuration:
 
 DNS Records:
 ------------
-See above for required DNS records
+A Record:
+  Type: A, Name: @, Value: $SERVER_IP
+
+CNAME Record:
+  Type: CNAME, Name: www, Value: $domain
+
+MX Record:
+  Type: MX, Name: @, Value: $MAILCOW_HOSTNAME, Priority: 10
+
+SPF Record:
+  Type: TXT, Name: @, Value: "v=spf1 mx ~all"
+
+DMARC Record:
+  Type: TXT, Name: _dmarc, Value: "v=DMARC1; p=quarantine; rua=mailto:postmaster@$domain"
+
+DKIM Record:
+$(if [[ -n "$dkim_record" ]]; then
+    echo "  Type: TXT, Name: dkim._domainkey, Value: \"$dkim_record\""
+    echo "  ✓ DKIM is ready!"
+else
+    echo "  ⚠ Not yet available - get it from Mailcow admin panel"
+    echo "  https://${MAILCOW_HOSTNAME}:8443 → Konfiguration → DKIM-Schlüssel"
+fi)
 
 Next Steps:
 -----------
-1. Add DNS records to your domain registrar
+1. Add ALL DNS records to your domain registrar (including DKIM!)
 2. Wait for DNS propagation (10-30 minutes)
 3. Test website: https://$domain
 4. Test email: Send to info@$domain
-5. Check Mailcow admin panel for DKIM record
+5. Verify DNS: https://mxtoolbox.com/SuperTool.aspx?action=mx:$domain
+
+Testing Email:
+--------------
+Test SPF/DKIM/DMARC:
+  - https://mxtoolbox.com/dkim.aspx
+  - Send test email to: check-auth@verifier.port25.com
 
 Files Created:
 --------------
@@ -501,11 +571,14 @@ main() {
     echo -e "${BLUE}Step 3: DNS Configuration${NC}"
     echo "-------------------------"
 
-    # Generate DNS records
+    # Generate DNS records (this also fetches DKIM)
     generate_dns_records "$DOMAIN"
 
+    # Get DKIM record for summary
+    DKIM_RECORD=$(get_dkim_record "$DOMAIN" 2>/dev/null)
+
     # Create summary
-    create_summary_file "$DOMAIN"
+    create_summary_file "$DOMAIN" "$DKIM_RECORD"
 
     echo ""
     echo -e "${GREEN}================================${NC}"
