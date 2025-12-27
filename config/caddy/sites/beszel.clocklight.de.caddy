@@ -1,0 +1,8 @@
+beszel.clocklight.de {
+    reverse_proxy beszel:8090
+    import ../snippets/compression.caddy
+
+    log {
+        output file /var/log/caddy/beszel.clocklight.de.log
+    }
+}

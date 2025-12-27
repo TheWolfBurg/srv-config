@@ -35,7 +35,16 @@ cp /srv/caddy/docker-compose.yml ${BACKUP_DIR}/caddy/
 # Backup Netdata configuration
 echo "Backing up Netdata configuration..."
 mkdir -p ${BACKUP_DIR}/netdata
-cp /srv/netdata/docker-compose.yml ${BACKUP_DIR}/netdata/
+cp /srv/netdata/docker-compose.yml ${BACKUP_DIR}/netdata/ 2>/dev/null || true
+
+# Backup Beszel configuration
+echo "Backing up Beszel configuration..."
+mkdir -p ${BACKUP_DIR}/beszel
+cp /srv/beszel/docker-compose.yml ${BACKUP_DIR}/beszel/
+# Backup Beszel data (SQLite database with metrics)
+if [ -d "/srv/beszel/beszel_data" ]; then
+    tar -czf ${BACKUP_DIR}/beszel/beszel_data.tar.gz -C /srv/beszel beszel_data/
+fi
 
 # Backup system configuration
 echo "Backing up system configuration..."
@@ -77,6 +86,7 @@ Included Configurations:
 - mailcow (mailcow.conf, data/conf/, docker-compose.yml)
 - Caddy (Caddyfile, sites, snippets, docker-compose.yml)
 - Netdata (docker-compose.yml)
+- Beszel (docker-compose.yml, beszel_data.tar.gz)
 - System (/etc/hostname, hosts, fstab, crontab)
 - SSH (sshd_config)
 - Firewall (iptables, ufw)

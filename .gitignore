@@ -1,6 +1,12 @@
 # Ignore data backups (too large for git)
 data/
 mailu/
+backups/
+
+# Ignore large service directories (configs are in /srv/config/)
+caddy/
+beszel/
+mailcow/
 
 # Ignore all backup archives
 *.tar.gz
